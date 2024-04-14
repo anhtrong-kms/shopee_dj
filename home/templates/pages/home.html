@@ -1,0 +1,82 @@
+{% extends "pages/base.html" %}
+{% load static %}
+{% load humanize %}
+{% block title %}
+Home
+{% endblock %}
+
+{% block content %}
+<div class="home-product">
+    <div class="row sm-gutter">
+        <!-- Product item -->
+        <!-- Loop through each product -->
+        {% for product in products %}
+        <div class="col l-2-4 m-4 c-6">
+            <a href="#" class="home-product-item">
+                <div class="home-product-item__img" style="background-image: url({{ product.image.url }});">
+                </div>
+                <h4 class="home-product-item__name">
+                    {{ product.name }}
+                </h4>
+                {% if product.discount == 0 %}
+                    <!-- Only display original price if discount is 0 -->
+                    <div class="home-product-item__price">
+                        <span class="home-product-item__price-current">₫{{ product.price|floatformat:0|intcomma }}</span>
+                    </div>
+                {% else %}
+                    <!-- Display both original and discounted price -->
+                    <div class="home-product-item__price">
+                        <span class="home-product-item__price-old">₫{{ product.price|floatformat:0|intcomma }}</span>
+                        <span class="home-product-item__price-current">₫{{ product.discounted_price|floatformat:0|intcomma }}</span>
+                    </div>
+                {% endif %}
+                <div class="home-product-item__action">
+                    <span class="home-product-item__like home-product-item__like--liked">
+                        <i class="home-product-item__like-icon-empty far fa-heart"></i>
+                        <i class="home-product-item__like-icon-fill fas fa-heart"></i>
+                    </span>
+                    <div class="home-product-item__rating">
+                        <i class="home-product-item__star--gold fas fa-star"></i>
+                        <i class="home-product-item__star--gold fas fa-star"></i>
+                        <i class="home-product-item__star--gold fas fa-star"></i>
+                        <i class="home-product-item__star--gold fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="home-product-item__sold">{{ product.sold_quantity }} Đã bán</div>
+                </div>
+                <div class="home-product-item__origin">
+                    <span class="home-product-item__brand">Whoo</span>
+                    <span class="home-product-item__origin-name">{{ product.origin }}</span>
+                </div>
+                <div class="home-product-item__favourite">
+                    <i class="fas fa-check "></i>
+                    <span>Yêu thích</span>
+                </div>
+                <div class="home-product-item__sale-off">
+                    <span class="home-product-item__sale-off-percent">{{ product.discount|floatformat:0 }}%</span>
+                    <span class="home-product-item__sale-off-label">GIẢM</span>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if products.has_previous %}
+            <a href="?page={{ products.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ products.number }} of {{ products.paginator.num_pages }}.
+        </span>
+
+        {% if products.has_next %}
+            <a href="?page={{ products.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+</div>
+
+
+{% endblock %}
